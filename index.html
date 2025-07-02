@@ -1,90 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Midnight Gradient</title>
-  <style>
-    /* Define the colors */
-    :root {
-      --midnight-blue: #0b1a38; /* deep, almost navy blue */
-      --starlight-silver: #cbd2d8; /* cool silvery pale gray */
-      --sunlight-gold: #bfa05a; /* warm gold, NOT yellow */
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Midnight Gradient</title>
+<style>
+  /* Colors */
+  /* Midnight Blue: #191970 (a classic deep midnight blue) */
+  /* Starlight Silver: #C0C0C0 (silver tone) */
+  /* Sunlight Gold: #FFD700 (gold but NOT yellow — classic gold) */
 
-    /* Reset margin/padding */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  body, html {
+    margin: 0; padding: 0; height: 100%;
+    background: linear-gradient(
+      135deg,
+      #191970 0%,          /* Midnight Blue */
+      #C0C0C0 50%,         /* Starlight Silver */
+      #FFD700 100%          /* Sunlight Gold */
+    );
+    /* Smooth gradient transition */
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+  }
 
-    body, html {
-      height: 100%;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(
-        120deg,
-        var(--midnight-blue) 0%,
-        var(--starlight-silver) 50%,
-        var(--sunlight-gold) 100%
-      );
-      background-attachment: fixed;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      user-select: none;
-    }
-
-    h1 {
-      font-size: 3rem;
-      text-shadow: 0 0 10px rgba(191, 160, 90, 0.8);
-    }
-
-    p {
-      font-size: 1.2rem;
-      margin-top: 1rem;
-      color: var(--starlight-silver);
-      max-width: 600px;
-      line-height: 1.5;
-      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    }
-
-    /* Add a subtle shimmer animation on the background */
-    @keyframes shimmer {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-
-    body {
-      background: linear-gradient(
-        270deg,
-        var(--midnight-blue),
-        var(--starlight-silver),
-        var(--sunlight-gold),
-        var(--starlight-silver),
-        var(--midnight-blue)
-      );
-      background-size: 1000% 1000%;
-      animation: shimmer 30s ease infinite;
-    }
-  </style>
+  @keyframes gradientShift {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+  }
+</style>
 </head>
 <body>
-  <div>
-    <h1>Welcome to Roselith Ash's World</h1>
-    <p>
-      A gradient inspired by midnight skies, shimmering starlight, and warm golden dawn — 
-      designed for a subtle, elegant GitHub Pages website.
-    </p>
-  </div>
 </body>
 </html>
