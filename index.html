@@ -3,21 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>Whispers Are Whisking</title>
-  <link href="https://fonts.googleapis.com/css2?family=Windsong&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Windsong', cursive;
       background: linear-gradient(135deg, #0d1b2a, #1b263b, #f3eac2);
       background-size: 400% 400%;
       animation: moveGradient 60s ease infinite;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
       overflow: hidden;
-      color: #f3eac2;
     }
 
     @keyframes moveGradient {
@@ -26,98 +19,82 @@
       100% { background-position: 0% 50%; }
     }
 
-    .container {
-      z-index: 2;
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      border-radius: 2rem;
-      padding: 40px 60px;
-      max-width: 600px;
-      text-align: center;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
-
-    h1 {
-      font-size: 3.2rem;
-      font-weight: normal;
-      letter-spacing: 2px;
-      color: #f3eac2;
-    }
-
-    .star-dot {
-      position: relative;
-    }
-
-    .star-dot::after {
-      content: '✦';
-      position: absolute;
-      top: -0.6em;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.6em;
-      color: #fff8dc;
-    }
-
-    p {
-      font-size: 1.4rem;
-      margin-top: 20px;
-      color: #e0e0e0;
-    }
-
+    /* Shooting Stars */
     .shooting-star {
       position: absolute;
-      width: 2px;
-      height: 2px;
-      background: gold;
-      box-shadow: 0 0 6px gold;
+      width: 4px;
+      height: 4px;
+      background: #fff5c0;
+      box-shadow: 0 0 12px #fff5c0;
       border-radius: 50%;
-      animation: shoot 10s linear infinite;
-      opacity: 0.7;
+      animation: shoot 3s ease-in-out forwards;
+      opacity: 0;
     }
 
     @keyframes shoot {
       0% {
-        top: -10%;
-        left: -10%;
-        transform: translate(0, 0);
+        transform: translate(0, 0) scale(0.9);
         opacity: 0;
       }
       10% {
         opacity: 1;
       }
+      80% {
+        transform: translate(300px, 600px) scale(1.5);
+        opacity: 0.8;
+      }
       100% {
-        top: 110%;
-        left: 110%;
-        transform: translate(100vw, 100vh);
+        transform: translate(400px, 800px) scale(0);
         opacity: 0;
       }
     }
 
-    /* Create multiple stars with delays */
-    .shooting-star:nth-child(1) { animation-delay: 0s; }
-    .shooting-star:nth-child(2) { animation-delay: 8s; }
-    .shooting-star:nth-child(3) { animation-delay: 15s; }
-    .shooting-star:nth-child(4) { animation-delay: 22s; }
-    .shooting-star:nth-child(5) { animation-delay: 31s; }
+    /* Generate 8 shooting stars with different timings */
+    .shooting-star:nth-child(1) { top: 5%; left: 10%; animation-delay: 1s; }
+    .shooting-star:nth-child(2) { top: 15%; left: 20%; animation-delay: 5s; }
+    .shooting-star:nth-child(3) { top: 25%; left: 70%; animation-delay: 9s; }
+    .shooting-star:nth-child(4) { top: 35%; left: 40%; animation-delay: 13s; }
+    .shooting-star:nth-child(5) { top: 45%; left: 30%; animation-delay: 17s; }
+    .shooting-star:nth-child(6) { top: 60%; left: 50%; animation-delay: 21s; }
+    .shooting-star:nth-child(7) { top: 75%; left: 80%; animation-delay: 25s; }
+    .shooting-star:nth-child(8) { top: 85%; left: 60%; animation-delay: 29s; }
 
+    /* Twinkling Background Stars */
+    .twinkle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #ffffffbb;
+      border-radius: 50%;
+      animation: twinkle 2s infinite ease-in-out alternate;
+    }
+
+    @keyframes twinkle {
+      from { opacity: 0.4; transform: scale(1); }
+      to { opacity: 1; transform: scale(1.3); }
+    }
   </style>
 </head>
 <body>
-  <!-- Background stars -->
+  <!-- Shooting Stars -->
+  <div class="shooting-star"></div>
+  <div class="shooting-star"></div>
+  <div class="shooting-star"></div>
   <div class="shooting-star"></div>
   <div class="shooting-star"></div>
   <div class="shooting-star"></div>
   <div class="shooting-star"></div>
   <div class="shooting-star"></div>
 
-  <!-- Main content -->
-  <div class="container">
-    <h1>
-      wh<span class="star-dot">i</span>spers are wh<span class="star-dot">i</span>sk<span class="star-dot">i</span>ng...
-    </h1>
-    <p>✦ Whispers Are Whisking ✦</p>
-    <p>A celestial bakery is rising</p>
-    <p>Launching soon ✦ Stay tuned</p>
-  </div>
+  <!-- Light scattered twinkle stars -->
+  <script>
+    for (let i = 0; i < 40; i++) {
+      const star = document.createElement('div');
+      star.classList.add('twinkle');
+      star.style.top = Math.random() * 100 + '%';
+      star.style.left = Math.random() * 100 + '%';
+      document.body.appendChild(star);
+    }
+  </script>
 </body>
 </html>
