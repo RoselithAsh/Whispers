@@ -3,32 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <title>Whispers Are Whisking</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Poppins&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Windsong&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       padding: 0;
-      background: #0d1b2a;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Windsong', cursive;
+      background: linear-gradient(135deg, #0d1b2a, #1b263b, #f3eac2);
+      background-size: 400% 400%;
+      animation: moveGradient 60s ease infinite;
       display: flex;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      color: #eaeaea;
-      text-align: center;
       overflow: hidden;
-    }
-
-    .stars {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-      background: linear-gradient(135deg, #0d1b2a, #1b263b, #f3eac2);
-      background-size: 400% 400%;
-      animation: moveGradient 60s ease infinite;
-      z-index: -1;
+      color: #f3eac2;
     }
 
     @keyframes moveGradient {
@@ -38,50 +27,97 @@
     }
 
     .container {
-      max-width: 600px;
-      padding: 40px;
-      background: rgba(255, 255, 255, 0.07);
-      backdrop-filter: blur(12px);
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
       border-radius: 2rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-      z-index: 1;
+      padding: 40px 60px;
+      max-width: 600px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
 
     h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.8rem;
-      margin-bottom: 1rem;
+      font-size: 3.2rem;
+      font-weight: normal;
+      letter-spacing: 2px;
       color: #f3eac2;
-      text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.2);
+    }
+
+    .star-dot {
+      position: relative;
+    }
+
+    .star-dot::after {
+      content: '✦';
+      position: absolute;
+      top: -0.6em;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.6em;
+      color: #fff8dc;
     }
 
     p {
-      font-size: 1.1rem;
-      line-height: 1.6;
+      font-size: 1.4rem;
+      margin-top: 20px;
       color: #e0e0e0;
     }
 
-    .twinkle {
+    .shooting-star {
       position: absolute;
       width: 2px;
       height: 2px;
-      background: #ffffff;
+      background: gold;
+      box-shadow: 0 0 6px gold;
       border-radius: 50%;
-      animation: twinkle 2s infinite ease-in-out;
-      opacity: 0.6;
+      animation: shoot 10s linear infinite;
+      opacity: 0.7;
     }
 
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.6; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.5); }
+    @keyframes shoot {
+      0% {
+        top: -10%;
+        left: -10%;
+        transform: translate(0, 0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        top: 110%;
+        left: 110%;
+        transform: translate(100vw, 100vh);
+        opacity: 0;
+      }
     }
+
+    /* Create multiple stars with delays */
+    .shooting-star:nth-child(1) { animation-delay: 0s; }
+    .shooting-star:nth-child(2) { animation-delay: 8s; }
+    .shooting-star:nth-child(3) { animation-delay: 15s; }
+    .shooting-star:nth-child(4) { animation-delay: 22s; }
+    .shooting-star:nth-child(5) { animation-delay: 31s; }
+
   </style>
 </head>
 <body>
-  <div class="stars"></div>
+  <!-- Background stars -->
+  <div class="shooting-star"></div>
+  <div class="shooting-star"></div>
+  <div class="shooting-star"></div>
+  <div class="shooting-star"></div>
+  <div class="shooting-star"></div>
+
+  <!-- Main content -->
   <div class="container">
-    <h1>✦ Whispers are whisking ✦</h1>
-    <p>A celestial bakery is rising.</p>
+    <h1>
+      wh<span class="star-dot">i</span>spers are wh<span class="star-dot">i</span>sk<span class="star-dot">i</span>ng...
+    </h1>
+    <p>✦ Whispers Are Whisking ✦</p>
+    <p>A celestial bakery is rising</p>
+    <p>Launching soon ✦ Stay tuned</p>
   </div>
 </body>
 </html>
