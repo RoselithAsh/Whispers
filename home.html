@@ -7,11 +7,13 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Windsong&display=swap');
 
-  /* Base and body setup */
-  body, html {
-    margin: 0; padding: 0; height: 100%;
+  /* Reset & base */
+  html, body {
+    margin: 0; padding: 0;
+    height: 100%;
     font-family: 'Windsong', cursive;
     overflow-x: hidden;
+    color: #f0e6f6;
     background: linear-gradient(
       135deg,
       #191970 0%,
@@ -19,79 +21,88 @@
       #FFD700 100%
     );
     background-size: 400% 400%;
-    animation: gradientShift 15s ease infinite;
-    transition: background-position 1s ease;
+    animation: gradientShift 30s ease infinite;
+    scroll-behavior: smooth;
   }
 
+  /* Gradient animation */
   @keyframes gradientShift {
     0% {background-position: 0% 50%;}
     50% {background-position: 100% 50%;}
     100% {background-position: 0% 50%;}
   }
 
-  /* Big glass box overlay */
-  .glass-box {
+  /* Starfield canvas fixed behind content */
+  #starfield {
     position: fixed;
-    top: 20px;
-    left: 20px;
-    right: 20px;
-    bottom: 20px;
-    border-radius: 30px;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Glass box container */
+  .glass-box {
+    position: relative;
+    max-width: 900px;
+    margin: 3rem auto 6rem;
+    padding: 3rem 4rem;
     background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 50px rgba(255, 255, 255, 0.15);
-    padding: 3rem 4rem;
-    color: #f0e6f6;
-    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+    z-index: 1;
   }
 
-  /* Content inside glass box */
+  /* Header styles */
   header {
     text-align: center;
+    margin-bottom: 2rem;
+  }
+  header h1 {
     font-family: 'Great Vibes', cursive;
     font-size: 4rem;
+    margin: 0;
     color: #e2c2ff;
-    margin-bottom: 1rem;
     text-shadow: 0 0 15px #bd93f9;
   }
-
-  p.tagline {
-    text-align: center;
-    font-style: italic;
+  header p {
+    font-weight: 600;
+    letter-spacing: 0.1em;
     font-size: 1.3rem;
-    color: #c7c3e3;
-    margin-bottom: 3rem;
+    color: #d5c4f1;
+    margin-top: 0.3rem;
   }
 
-  main {
-    max-width: 900px;
-    margin: 0 auto;
+  /* Products grid */
+  .products {
     display: grid;
     grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-    gap: 2.5rem;
+    gap: 2rem;
   }
 
   .product-card {
-    background: rgba(255 255 255 / 0.07);
-    border: 1px solid #a48ae3;
+    background: rgba(255 255 255 / 0.12);
     border-radius: 20px;
-    padding: 1.8rem 1.5rem;
-    box-shadow: 0 0 30px #7c66c7aa;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 0 30px rgba(124, 102, 199, 0.3);
     text-align: center;
-    cursor: default;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    color: #f0e6f6;
   }
   .product-card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-8px);
     box-shadow: 0 0 50px #cba7ffcc;
   }
 
   .product-name {
     font-family: 'Great Vibes', cursive;
-    font-size: 2.3rem;
-    margin-bottom: 0.5rem;
+    font-size: 2.4rem;
+    margin-bottom: 0.4rem;
     color: #e2c2ff;
   }
 
@@ -101,39 +112,54 @@
     color: #d5c4f1;
   }
 
+  /* Footer */
   footer {
-    margin-top: 4rem;
-    padding: 1.5rem 0 2rem 0;
     text-align: center;
     font-size: 0.9rem;
     color: #9183b7aa;
+    margin-bottom: 3rem;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    .glass-box {
+      margin: 2rem 1rem 4rem;
+      padding: 2rem 2rem;
+    }
+    header h1 {
+      font-size: 3rem;
+    }
   }
 </style>
 </head>
 <body>
 
-<div class="glass-box" tabindex="0">
-  <header>Whispers Bakery</header>
-  <p class="tagline">Delicacies from Moonlight to Stardust ✨</p>
+<canvas id="starfield"></canvas>
 
-  <main>
+<div class="glass-box" role="main" aria-label="Whispers Bakery homepage content">
+  <header>
+    <h1>Whispers Bakery</h1>
+    <p>Delicacies from Moonlight to Stardust ✨</p>
+  </header>
+
+  <section class="products" aria-label="Bakery product lines">
     <div class="product-card" tabindex="0">
-      <h2 class="product-name">Mia</h2>
-      <p class="product-desc">Lovely</p>
+      <h2 class="product-name">Moondust</h2>
+      <p class="product-desc">Whisper-soft cakes with a sprinkle of magic.</p>
     </div>
     <div class="product-card" tabindex="0">
-      <h2 class="product-name">Flowers</h2>
-      <p class="product-desc">She doesn't like this name</p>
+      <h2 class="product-name">Starlight</h2>
+      <p class="product-desc">Light, airy pastries that twinkle with every bite.</p>
     </div>
     <div class="product-card" tabindex="0">
-      <h2 class="product-name">Yara</h2>
-      <p class="product-desc">smexy</p>
+      <h2 class="product-name">Stardust</h2>
+      <p class="product-desc">Mystical cookies dusted with cosmic sugar.</p>
     </div>
     <div class="product-card" tabindex="0">
-      <h2 class="product-name">Riri</h2>
-      <p class="product-desc">New</p>
+      <h2 class="product-name">Moonlight</h2>
+      <p class="product-desc">Silky breads that glow with comfort and warmth.</p>
     </div>
-  </main>
+  </section>
 
   <footer>
     &copy; 2025 Whispers Bakery — All Rights Reserved
@@ -141,21 +167,127 @@
 </div>
 
 <script>
-  // On scroll, gradually shift the background-position to "freeze" on top-left color (#191970)
-  window.addEventListener('scroll', () => {
-    // How far down we've scrolled (0 to max scroll)
-    const scrollTop = window.scrollY;
-    const maxScroll = document.body.scrollHeight - window.innerHeight;
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
 
-    // Calculate a background position X% to move from 0% to 0% (fixed), but Y% from 50% to 0%
-    // So background moves vertically from center to top
-    let progress = Math.min(scrollTop / maxScroll, 1);
+  let stars = [];
+  const numStars = 150;
 
-    // We'll shift background-position Y from 50% to 0%
-    let posY = 50 - (50 * progress);
+  let shootingStars = [];
+  const numShootingStars = 8;
 
-    document.body.style.backgroundPosition = `0% ${posY}%`;
-  });
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function Star() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.radius = Math.random() * 1.2 + 0.3;
+    this.alpha = Math.random();
+    this.alphaChange = 0.005 + Math.random() * 0.02;
+  }
+
+  function ShootingStar() {
+    this.reset();
+  }
+
+  ShootingStar.prototype.reset = function() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height * 0.5;
+    this.len = Math.random() * 80 + 50;
+    this.speed = Math.random() * 6 + 6;
+    this.radius = Math.random() * 1.2 + 0.5;
+    this.alpha = 1;
+    this.fadeRate = 0.01 + Math.random() * 0.02;
+    this.angle = Math.PI / 4;
+    this.dx = Math.cos(this.angle) * this.speed;
+    this.dy = Math.sin(this.angle) * this.speed;
+    this.active = true;
+  };
+
+  ShootingStar.prototype.update = function() {
+    if (!this.active) return;
+
+    this.x += this.dx;
+    this.y += this.dy;
+    this.alpha -= this.fadeRate;
+
+    if (this.alpha <= 0) {
+      this.active = false;
+      setTimeout(() => {
+        this.reset();
+        this.active = true;
+      }, Math.random() * 5000 + 1000);
+    }
+  };
+
+  ShootingStar.prototype.draw = function() {
+    if (!this.active) return;
+
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.strokeStyle = 'white';
+    ctx.shadowColor = 'white';
+    ctx.shadowBlur = 10;
+    ctx.lineWidth = this.radius;
+
+    ctx.beginPath();
+    ctx.moveTo(this.x, this.y);
+    ctx.lineTo(this.x - this.dx * this.len / this.speed, this.y - this.dy * this.len / this.speed);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.fillStyle = 'white';
+    ctx.shadowBlur = 15;
+    ctx.arc(this.x, this.y, this.radius * 1.5, 0, 2 * Math.PI);
+    ctx.fill();
+
+    ctx.restore();
+  };
+
+  for (let i = 0; i < numStars; i++) {
+    stars.push(new Star());
+  }
+
+  for (let i = 0; i < numShootingStars; i++) {
+    shootingStars.push(new ShootingStar());
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let star of stars) {
+      star.alpha += star.alphaChange;
+      if (star.alpha <= 0) {
+        star.alpha = 0;
+        star.alphaChange = -star.alphaChange;
+      }
+      if (star.alpha >= 1) {
+        star.alpha = 1;
+        star.alphaChange = -star.alphaChange;
+      }
+
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
+      ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+      ctx.shadowColor = 'white';
+      ctx.shadowBlur = 4;
+      ctx.fill();
+    }
+
+    for (let sStar of shootingStars) {
+      sStar.update();
+      sStar.draw();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  draw();
 </script>
 
 </body>
