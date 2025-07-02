@@ -6,12 +6,9 @@
 <title>Whispers Bakery | Home</title>
 <style>
   html, body {
-    height: 100%;
-    margin: 0; padding: 0;
-    overflow-y: scroll;
-  }
-
-  body {
+    margin: 0; padding: 0; height: 300vh; /* tall so you can scroll */
+    overflow-x: hidden;
+    font-family: 'Georgia', serif;
     background: linear-gradient(
       135deg,
       #191970 0%,
@@ -20,49 +17,28 @@
     );
     background-size: 400% 400%;
     background-repeat: no-repeat;
-    transition: background-position 0.3s ease-out;
-    font-family: 'Georgia', serif;
-  }
-
-  .glass-box {
-    position: fixed;
-    top: 20px;  /* margin away from edges */
-    left: 20px;
-    right: 20px;
-    bottom: 20px;
-    border-radius: 30px;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
-    pointer-events: none; /* so clicks go through */
-  }
-
-  /* Just to enable scrolling so you can test the effect */
-  .spacer {
-    height: 300vh; /* 3x viewport height to allow scroll */
+    background-attachment: fixed; /* Keep background fixed while scrolling */
+    transition: background-position 0.1s ease-out;
   }
 </style>
 </head>
 <body>
 
-<div class="glass-box"></div>
-
-<div class="spacer"></div>
-
 <script>
-  const body = document.body;
-
+  // Scroll-driven background gradient position shift
   window.addEventListener('scroll', () => {
-    const scrollTop = window.scrollY || window.pageYOffset;
-    // Map scrollTop to background position (0% to 100% vertically)
-    // The 400% background-size means we can shift more dramatically
-    const maxScroll = document.body.scrollHeight - window.innerHeight;
-    const scrollPercent = Math.min(scrollTop / maxScroll, 1);
-    // Calculate background position Y between 0% and 100%
+    const scrollTop = window.scrollY;
+    const docHeight = document.body.scrollHeight - window.innerHeight;
+
+    // Calculate scroll percent (0 to 1)
+    const scrollPercent = scrollTop / docHeight;
+
+    // Map scrollPercent to background position Y (0% to 100%)
+    // We want to shift vertically from 0% to 100%
     const bgPosY = scrollPercent * 100;
-    body.style.backgroundPosition = `50% ${bgPosY}%`;
+
+    // Apply to background position
+    document.body.style.backgroundPosition = `50% ${bgPosY}%`;
   });
 </script>
 
