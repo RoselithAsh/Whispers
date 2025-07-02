@@ -31,13 +31,16 @@
 </style>
 </head>
 <body>
-  <canvas id="stars"></canvas>
+<canvas id="starfield"></canvas>
 
 <script>
-  const canvas = document.getElementById('stars');
+  const canvas = document.getElementById('starfield');
   const ctx = canvas.getContext('2d');
 
-  // Set canvas size to full window
+  let stars = [];
+  const numStars = 150;
+
+  // Resize canvas to full window size
   function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -45,23 +48,47 @@
   resize();
   window.addEventListener('resize', resize);
 
-  // Generate stars randomly
-  function generateStars(numStars) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < numStars; i++) {
-      const x = Math.random() * canvas.width;
-      const y = Math.random() * canvas.height;
-      const radius = Math.random() * 1.5 + 0.5; // small star sizes
-      const alpha = Math.random() * 0.8 + 0.2; // random brightness
-
-      ctx.beginPath();
-      ctx.arc(x, y, radius, 0, 2 * Math.PI);
-      ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`; // white stars with varying opacity
-      ctx.fill();
-    }
+  // Star constructor
+  function Star() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.radius = Math.random() * 1.2 + 0.3; // small stars
+    this.alpha = Math.random(); // transparency for twinkle start
+    this.alphaChange = 0.005 + Math.random() * 0.02; // twinkle speed and direction
   }
 
-  generateStars(150); // Number of stars to scatter
+  // Create stars
+  for (let i = 0; i < numStars; i++) {
+    stars.push(new Star());
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let star of stars) {
+      // Update alpha for twinkle
+      star.alpha += star.alphaChange;
+      if (star.alpha <= 0) {
+        star.alpha = 0;
+        star.alphaChange = -star.alphaChange;
+      }
+      if (star.alpha >= 1) {
+        star.alpha = 1;
+        star.alphaChange = -star.alphaChange;
+      }
+
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
+      ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`; // white stars with varying alpha
+      ctx.shadowColor = 'white';
+      ctx.shadowBlur = 4; // glow for visibility on all background colors
+      ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  draw();
 </script>
 </body>
 </html>
