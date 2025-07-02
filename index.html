@@ -31,5 +31,37 @@
 </style>
 </head>
 <body>
+  <canvas id="stars"></canvas>
+
+<script>
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+
+  // Set canvas size to full window
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Generate stars randomly
+  function generateStars(numStars) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < numStars; i++) {
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height;
+      const radius = Math.random() * 1.5 + 0.5; // small star sizes
+      const alpha = Math.random() * 0.8 + 0.2; // random brightness
+
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, 2 * Math.PI);
+      ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`; // white stars with varying opacity
+      ctx.fill();
+    }
+  }
+
+  generateStars(150); // Number of stars to scatter
+</script>
 </body>
 </html>
