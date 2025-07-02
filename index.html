@@ -3,21 +3,39 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Starry Dawn Background</title>
+<title>Dawn Arrival Background</title>
 <style>
-  /* Colors */
-  :root {
-    --midnight-blue: #0b1a38;
-    --starlight-silver: #c9d1d3;
-    --sunlight-gold: #f9d71c;
+  /* Full screen body with no margin */
+  body, html {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(180deg, #154360 0%, #f8f9f9 60%, #fef9e7 100%);
+    animation: dawnShift 30s ease-in-out infinite alternate;
   }
 
-  body, html {
-    margin: 0; height: 100%;
-    overflow: hidden;
-    background: linear-gradient(to bottom, var(--midnight-blue), var(--starlight-silver), var(--sunlight-gold));
-    position: relative;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* Gradient animation shifting the background colors vertically */
+  @keyframes dawnShift {
+    0% {
+      background: linear-gradient(180deg, #154360 0%, #f8f9f9 60%, #fef9e7 100%);
+    }
+    50% {
+      background: linear-gradient(180deg, #2a5a7d 10%, #e6e8e8 70%, #fff7d9 100%);
+    }
+    100% {
+      background: linear-gradient(180deg, #154360 0%, #f8f9f9 60%, #fef9e7 100%);
+    }
+  }
+
+  /* Star container */
+  .stars {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    z-index: 1;
   }
 
   /* Twinkling stars */
@@ -26,35 +44,39 @@
     background: white;
     border-radius: 50%;
     opacity: 0.8;
-    animation: twinkle 3s infinite ease-in-out;
-  }
-  .star:nth-child(odd) {
-    animation-delay: 0s;
-  }
-  .star:nth-child(even) {
-    animation-delay: 1.5s;
-  }
-  @keyframes twinkle {
-    0%, 100% { opacity: 0.8; }
-    50% { opacity: 0.2; }
+    animation: twinkle 3s infinite alternate;
   }
 
-  /* Shooting stars container */
+  /* Different twinkle durations and delays */
+  .star:nth-child(odd) {
+    animation-duration: 2.5s;
+  }
+  .star:nth-child(even) {
+    animation-duration: 3.5s;
+  }
+  @keyframes twinkle {
+    0% {opacity: 0.3;}
+    100% {opacity: 1;}
+  }
+
+  /* Shooting stars */
   .shooting-star {
     position: absolute;
-    width: 120px; height: 2px;
-    background: linear-gradient(90deg, var(--sunlight-gold) 0%, var(--starlight-silver) 100%);
-    border-radius: 1px;
-    box-shadow: 0 0 6px var(--sunlight-gold);
-    animation: shoot 3s linear infinite;
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(-45deg, white, rgba(255,255,255,0));
+    border-radius: 999px;
+    filter: drop-shadow(0 0 6px white);
+    animation: shootingStar linear forwards;
   }
-  @keyframes shoot {
+
+  @keyframes shootingStar {
     0% {
-      transform: translateX(0) translateY(0) rotate(45deg);
+      transform: translateX(0) translateY(0) rotate(-45deg);
       opacity: 1;
     }
     100% {
-      transform: translateX(600px) translateY(600px) rotate(45deg);
+      transform: translateX(-800px) translateY(800px) rotate(-45deg);
       opacity: 0;
     }
   }
@@ -62,32 +84,43 @@
 </head>
 <body>
 
+<div class="stars"></div>
+
 <script>
-  // Generate twinkling stars scattered poetically
-  const starCount = 80;
-  for (let i = 0; i < starCount; i++) {
+  const starsContainer = document.querySelector('.stars');
+
+  // Create 150 twinkling stars scattered randomly
+  for (let i = 0; i < 150; i++) {
     const star = document.createElement('div');
     star.classList.add('star');
-    const size = Math.random() * 2 + 1; // 1 to 3 px stars
-    star.style.width = `${size}px`;
-    star.style.height = `${size}px`;
-    star.style.top = `${Math.random() * 100}%`;
-    star.style.left = `${Math.random() * 100}%`;
-    star.style.animationDuration = `${Math.random() * 3 + 2}s`;
-    document.body.appendChild(star);
+    const size = Math.random() * 2 + 1; // 1-3 px
+    star.style.width = size + 'px';
+    star.style.height = size + 'px';
+    star.style.top = Math.random() * 100 + 'vh';
+    star.style.left = Math.random() * 100 + 'vw';
+    star.style.animationDelay = (Math.random() * 3) + 's';
+    starsContainer.appendChild(star);
   }
 
-  // Shooting stars with different delays and start positions
-  const shootingStarCount = 8;
-  for (let i = 0; i < shootingStarCount; i++) {
+  // Create 8 shooting stars with staggered start times
+  function createShootingStar(delay) {
     const shootingStar = document.createElement('div');
     shootingStar.classList.add('shooting-star');
-    // Random starting position in the upper half of the screen
-    shootingStar.style.top = `${Math.random() * 40 + 5}%`;
-    shootingStar.style.left = `${Math.random() * 60}%`;
-    shootingStar.style.animationDelay = `${i * 1.5}s`;
-    shootingStar.style.animationDuration = `${2 + Math.random() * 2}s`;
-    document.body.appendChild(shootingStar);
+    shootingStar.style.top = (Math.random() * 50 + 10) + 'vh';
+    shootingStar.style.left = (Math.random() * 100 + 100) + 'vw'; // start offscreen right
+    shootingStar.style.animationDuration = '2s';
+    shootingStar.style.animationDelay = delay + 's';
+    starsContainer.appendChild(shootingStar);
+
+    // Remove after animation
+    shootingStar.addEventListener('animationend', () => {
+      shootingStar.remove();
+      createShootingStar(Math.random() * 20 + 10); // respawn randomly later
+    });
+  }
+
+  for(let i = 0; i < 8; i++) {
+    createShootingStar(i * 3);
   }
 </script>
 
