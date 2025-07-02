@@ -40,7 +40,9 @@
   let stars = [];
   const numStars = 150;
 
-  // Resize canvas to full window size
+  let shootingStars = [];
+  const numShootingStars = 8;
+
   function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -48,25 +50,93 @@
   resize();
   window.addEventListener('resize', resize);
 
-  // Star constructor
+  // Twinkling Star
   function Star() {
     this.x = Math.random() * canvas.width;
     this.y = Math.random() * canvas.height;
-    this.radius = Math.random() * 1.2 + 0.3; // small stars
-    this.alpha = Math.random(); // transparency for twinkle start
-    this.alphaChange = 0.005 + Math.random() * 0.02; // twinkle speed and direction
+    this.radius = Math.random() * 1.2 + 0.3;
+    this.alpha = Math.random();
+    this.alphaChange = 0.005 + Math.random() * 0.02;
   }
 
-  // Create stars
+  // Shooting Star
+  function ShootingStar() {
+    this.reset();
+  }
+
+  ShootingStar.prototype.reset = function() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height * 0.5; // top half for shooting stars
+    this.len = Math.random() * 80 + 50; // length of tail
+    this.speed = Math.random() * 6 + 6; // speed pixels per frame
+    this.radius = Math.random() * 1.2 + 0.5;
+    this.alpha = 1;
+    this.fadeRate = 0.01 + Math.random() * 0.02;
+    this.angle = Math.PI / 4; // 45 degrees diagonal shooting
+    this.dx = Math.cos(this.angle) * this.speed;
+    this.dy = Math.sin(this.angle) * this.speed;
+    this.active = true;
+  };
+
+  ShootingStar.prototype.update = function() {
+    if (!this.active) return;
+
+    this.x += this.dx;
+    this.y += this.dy;
+    this.alpha -= this.fadeRate;
+
+    if (this.alpha <= 0) {
+      this.active = false;
+      // reset after some random delay
+      setTimeout(() => {
+        this.reset();
+        this.active = true;
+      }, Math.random() * 5000 + 1000);
+    }
+  };
+
+  ShootingStar.prototype.draw = function() {
+    if (!this.active) return;
+
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+
+    // Draw shooting star tail as a white line with glow
+    ctx.strokeStyle = 'white';
+    ctx.shadowColor = 'white';
+    ctx.shadowBlur = 10;
+    ctx.lineWidth = this.radius;
+
+    ctx.beginPath();
+    ctx.moveTo(this.x, this.y);
+    ctx.lineTo(this.x - this.dx * this.len / this.speed, this.y - this.dy * this.len / this.speed);
+    ctx.stroke();
+
+    // Draw the head as a bright circle
+    ctx.beginPath();
+    ctx.fillStyle = 'white';
+    ctx.shadowBlur = 15;
+    ctx.arc(this.x, this.y, this.radius * 1.5, 0, 2 * Math.PI);
+    ctx.fill();
+
+    ctx.restore();
+  };
+
+  // Create twinkling stars
   for (let i = 0; i < numStars; i++) {
     stars.push(new Star());
+  }
+
+  // Create shooting stars
+  for (let i = 0; i < numShootingStars; i++) {
+    shootingStars.push(new ShootingStar());
   }
 
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // Draw twinkling stars
     for (let star of stars) {
-      // Update alpha for twinkle
       star.alpha += star.alphaChange;
       if (star.alpha <= 0) {
         star.alpha = 0;
@@ -79,10 +149,16 @@
 
       ctx.beginPath();
       ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
-      ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`; // white stars with varying alpha
+      ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
       ctx.shadowColor = 'white';
-      ctx.shadowBlur = 4; // glow for visibility on all background colors
+      ctx.shadowBlur = 4;
       ctx.fill();
+    }
+
+    // Update and draw shooting stars
+    for (let sStar of shootingStars) {
+      sStar.update();
+      sStar.draw();
     }
 
     requestAnimationFrame(draw);
