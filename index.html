@@ -3,24 +3,20 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Whispers Are Whisking</title>
+<title>Midnight Gradient with Stars & Glass Box</title>
 <style>
-  /* Colors */
-  /* Midnight Blue: #191970 (a classic deep midnight blue) */
-  /* Starlight Silver: #C0C0C0 (silver tone) */
-  /* Sunlight Gold: #FFD700 (gold but NOT yellow — classic gold) */
-
   body, html {
     margin: 0; padding: 0; height: 100%;
+    overflow: hidden;
     background: linear-gradient(
       135deg,
-      #191970 0%,          /* Midnight Blue */
-      #C0C0C0 50%,         /* Starlight Silver */
-      #FFD700 100%          /* Sunlight Gold */
+      #191970 0%,
+      #C0C0C0 50%,
+      #FFD700 100%
     );
-    /* Smooth gradient transition */
     background-size: 400% 400%;
     animation: gradientShift 15s ease infinite;
+    font-family: 'Georgia', serif;
   }
 
   @keyframes gradientShift {
@@ -28,10 +24,53 @@
     50% {background-position: 100% 50%;}
     100% {background-position: 0% 50%;}
   }
+
+  canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .glass-box {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2rem 3rem;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-align: center;
+    z-index: 2;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+  }
+
+  .glass-box span.star {
+    color: #ffffff;
+    opacity: 0.8;
+    margin: 0 0.5rem;
+  }
 </style>
 </head>
 <body>
+
 <canvas id="starfield"></canvas>
+
+<!-- GLASS BOX START -->
+<div class="glass-box">
+  <span class="star">★</span>
+  Whispers Are Whisking
+  <span class="star">★</span>
+</div>
+<!-- GLASS BOX END -->
 
 <script>
   const canvas = document.getElementById('starfield');
@@ -50,7 +89,6 @@
   resize();
   window.addEventListener('resize', resize);
 
-  // Twinkling Star
   function Star() {
     this.x = Math.random() * canvas.width;
     this.y = Math.random() * canvas.height;
@@ -59,20 +97,19 @@
     this.alphaChange = 0.005 + Math.random() * 0.02;
   }
 
-  // Shooting Star
   function ShootingStar() {
     this.reset();
   }
 
   ShootingStar.prototype.reset = function() {
     this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height * 0.5; // top half for shooting stars
-    this.len = Math.random() * 80 + 50; // length of tail
-    this.speed = Math.random() * 6 + 6; // speed pixels per frame
+    this.y = Math.random() * canvas.height * 0.5;
+    this.len = Math.random() * 80 + 50;
+    this.speed = Math.random() * 6 + 6;
     this.radius = Math.random() * 1.2 + 0.5;
     this.alpha = 1;
     this.fadeRate = 0.01 + Math.random() * 0.02;
-    this.angle = Math.PI / 4; // 45 degrees diagonal shooting
+    this.angle = Math.PI / 4;
     this.dx = Math.cos(this.angle) * this.speed;
     this.dy = Math.sin(this.angle) * this.speed;
     this.active = true;
@@ -87,7 +124,6 @@
 
     if (this.alpha <= 0) {
       this.active = false;
-      // reset after some random delay
       setTimeout(() => {
         this.reset();
         this.active = true;
@@ -100,8 +136,6 @@
 
     ctx.save();
     ctx.globalAlpha = this.alpha;
-
-    // Draw shooting star tail as a white line with glow
     ctx.strokeStyle = 'white';
     ctx.shadowColor = 'white';
     ctx.shadowBlur = 10;
@@ -112,7 +146,6 @@
     ctx.lineTo(this.x - this.dx * this.len / this.speed, this.y - this.dy * this.len / this.speed);
     ctx.stroke();
 
-    // Draw the head as a bright circle
     ctx.beginPath();
     ctx.fillStyle = 'white';
     ctx.shadowBlur = 15;
@@ -122,12 +155,10 @@
     ctx.restore();
   };
 
-  // Create twinkling stars
   for (let i = 0; i < numStars; i++) {
     stars.push(new Star());
   }
 
-  // Create shooting stars
   for (let i = 0; i < numShootingStars; i++) {
     shootingStars.push(new ShootingStar());
   }
@@ -135,7 +166,6 @@
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw twinkling stars
     for (let star of stars) {
       star.alpha += star.alphaChange;
       if (star.alpha <= 0) {
@@ -155,7 +185,6 @@
       ctx.fill();
     }
 
-    // Update and draw shooting stars
     for (let sStar of shootingStars) {
       sStar.update();
       sStar.draw();
@@ -166,5 +195,6 @@
 
   draw();
 </script>
+
 </body>
 </html>
